@@ -1,8 +1,21 @@
-import React from "react";
+import React, { useCallback } from "react";
 import Table, { Column } from "./Table";
+import { Bill } from "../stores/bills";
 
-const Bills: React.FC = () => {
-  const columns: Column[] = [
+const Bills: React.FC<{
+  bills: Bill[];
+  isPrivate?: boolean;
+  lastPage: number;
+  page: number;
+  pageSize: number;
+}> = ({
+  bills = [],
+  isPrivate = false,
+  lastPage = 1,
+  page = 1,
+  pageSize = 10,
+}) => {
+  let columns: Column[] = [
     {
       Header: "ID",
       accessor: "bill_id",
@@ -13,22 +26,29 @@ const Bills: React.FC = () => {
     },
   ];
 
-  const data: { bill_id: string; bill_title: string }[] = [
-    {
-      bill_id: "1",
-      bill_title: "제목 1",
-    },
-    {
-      bill_id: "1",
-      bill_title: "제목 1",
-    },
-    {
-      bill_id: "1",
-      bill_title: "제목 1",
-    },
-  ];
+  if (isPrivate) {
+    columns = [
+      ...columns,
+      {
+        Header: "내용",
+        accessor: "content",
+      },
+    ];
+  }
 
-  return <Table columns={columns} data={data} />;
+  const handleClickPage = useCallback((page: number) => {
+    console.log(page);
+  }, []);
+
+  return (
+    <Table
+      columns={columns}
+      currentPage={page}
+      data={bills}
+      lastPage={lastPage}
+      onClickPage={handleClickPage}
+    />
+  );
 };
 
 export default Bills;

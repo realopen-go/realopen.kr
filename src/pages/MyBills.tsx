@@ -11,16 +11,17 @@ import styled from "@emotion/styled";
 
 import Page from "./Page";
 import Bills from "../components/Bills";
-import { useBillsContext } from "../stores";
+import { useMyBillsContext } from "../stores";
 
 const Container = styled(BootstrapContainer)`
   padding-top: 10px;
   padding-bottom: 10px;
 `;
 
-const IndexPage: React.FC = () => {
+const MyBillsPage: React.FC = () => {
   const { register, handleSubmit } = useForm();
-  const { initBills, ...billsState } = useBillsContext();
+  const { initBills, ...billsState } = useMyBillsContext();
+
   const onSubmit = (data: any) => {
     console.log(data);
   };
@@ -36,6 +37,7 @@ const IndexPage: React.FC = () => {
           <Col md={8}>
             <Bills
               bills={billsState.bills}
+              isPrivate
               lastPage={billsState.lastPage}
               page={billsState.page}
               pageSize={billsState.pageSize}
@@ -63,4 +65,4 @@ const IndexPage: React.FC = () => {
   );
 };
 
-export default IndexPage;
+export default MyBillsPage;

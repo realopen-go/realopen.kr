@@ -8,6 +8,15 @@ const Navbar: React.FC = () => {
       <Link to="/">
         <BootstrapNavbar.Brand>REAL OPEN</BootstrapNavbar.Brand>
       </Link>
+      <BootstrapNavbar.Toggle />
+      <BootstrapNavbar.Collapse className="justify-content-end">
+        <BootstrapNavbar.Text>
+          <Link to="/login">로그인</Link>
+        </BootstrapNavbar.Text>
+        <BootstrapNavbar.Text>
+          <Link to="/my/bills">내 청구건 조회</Link>
+        </BootstrapNavbar.Text>
+      </BootstrapNavbar.Collapse>
     </BootstrapNavbar>
   );
 };
