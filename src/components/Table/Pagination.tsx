@@ -1,80 +1,89 @@
-import React, { useCallback, memo } from "react";
-import BootstrapPagination from "react-bootstrap/Pagination";
+import React, { memo, useCallback } from "react";
+import OrigPagination from "react-bootstrap/Pagination";
+import styled from "@emotion/styled";
 
-const PageFirstItem: React.FC<{ onClick: (arg0: number) => void }> = memo(
-  ({ onClick }) => {
-    const handleClickPage = useCallback(() => {
-      onClick(1);
-    }, [onClick]);
-
-    return <BootstrapPagination.First onClick={handleClickPage} />;
-  }
-);
+const StyledPagination = styled(OrigPagination)`
+  justify-content: center;
+`;
 
 const PageItem: React.FC<{
-  active: boolean;
-  onClick: (arg0: number) => void;
+  onChangePage: (page: number) => void;
   page: number;
-}> = memo(({ active = false, onClick, page }) => {
-  const handleClickPage = useCallback(() => {
-    onClick(page);
-  }, [onClick, page]);
-
+}> = memo(({ onChangePage, page }) => {
+  const handleClick = useCallback(() => {
+    onChangePage(page);
+  }, [onChangePage, page]);
   return (
-    <BootstrapPagination.Item active={active} onClick={handleClickPage}>
-      {page}
-    </BootstrapPagination.Item>
+    <OrigPagination.Item onClick={handleClick}>{page}</OrigPagination.Item>
   );
-});
-
-const PageLastItem: React.FC<{
-  lastPage: number;
-  onClick: (arg0: number) => void;
-}> = memo(({ lastPage, onClick }) => {
-  const handleClickPage = useCallback(() => {
-    onClick(lastPage);
-  }, [lastPage, onClick]);
-
-  return <BootstrapPagination.Last onClick={handleClickPage} />;
-});
-
-const PageNextItem: React.FC<{
-  onClick: (arg0: number) => void;
-  page: number;
-}> = memo(({ onClick, page }) => {
-  const handleClickPage = useCallback(() => {
-    onClick(page + 1);
-  }, [onClick, page]);
-
-  return <BootstrapPagination.Next onClick={handleClickPage} />;
-});
-
-const PagePrevItem: React.FC<{
-  onClick: (arg0: number) => void;
-  page: number;
-}> = memo(({ onClick, page }) => {
-  const handleClickPage = useCallback(() => {
-    onClick(page - 1);
-  }, [onClick, page]);
-
-  return <BootstrapPagination.Prev onClick={handleClickPage} />;
 });
 
 const Pagination: React.FC<{
   currentPage: number;
   lastPage: number;
-  onClickPage: (arg0: number) => void;
-}> = ({ currentPage, lastPage, onClickPage }) => {
+  onChangePage: (page: number) => void;
+}> = ({ currentPage, lastPage, onChangePage }) => {
+  const handleClickFirstItem = useCallback(() => {
+    onChangePage(1);
+  }, [onChangePage]);
+
+  const handleClickPrevItem = useCallback(() => {
+    onChangePage(currentPage - 1);
+  }, [currentPage, onChangePage]);
+
+  const handleClickNextItem = useCallback(() => {
+    onChangePage(currentPage + 1);
+  }, [currentPage, onChangePage]);
+
+  const handleClickLastItem = useCallback(() => {
+    onChangePage(lastPage);
+  }, [lastPage, onChangePage]);
+
+  const renderNextPageItems = () => {
+    const items = [];
+    for (let i = currentPage + 1; i <= lastPage && i - currentPage < 4; i++) {
+      items.push(
+        <PageItem onChangePage={onChangePage} page={i}>
+          {i}
+        </PageItem>
+      );
+    }
+
+    return items;
+  };
+
+  const renderPrevPageItems = () => {
+    const items = [];
+    for (let i = currentPage - 1; i >= 1 && currentPage - i < 4; i--) {
+      items.unshift(
+        <PageItem onChangePage={onChangePage} page={i}>
+          {i}
+        </PageItem>
+      );
+    }
+
+    return items;
+  };
+
   return (
-    <BootstrapPagination>
-      <PageFirstItem onClick={onClickPage} />
-      <PagePrevItem onClick={onClickPage} page={currentPage} />
+    <StyledPagination>
+      {currentPage > 1 && (
+        <>
+          <OrigPagination.First onClick={handleClickFirstItem} />
+          <OrigPagination.Prev onClick={handleClickPrevItem} />
+          {renderPrevPageItems()}
+        </>
+      )}
 
-      <PageItem active onClick={onClickPage} page={currentPage} />
-
-      <PageNextItem onClick={onClickPage} page={currentPage} />
-      <PageLastItem lastPage={lastPage} onClick={onClickPage} />
-    </BootstrapPagination>
+      <OrigPagination.Item active>{currentPage}</OrigPagination.Item>
+      {currentPage < lastPage && (
+        <>
+          {renderNextPageItems()}
+          <OrigPagination.Next onClick={handleClickNextItem} />
+          <OrigPagination.Last onClick={handleClickLastItem} />
+        </>
+      )}
+    </StyledPagination>
   );
 };
 

@@ -1,28 +1,30 @@
-import React, { useCallback } from "react";
+import React from "react";
 import Table, { Column } from "./Table";
-import { Bill } from "../stores/bills";
+import { Bill } from "../models";
 
 const Bills: React.FC<{
   bills: Bill[];
   isPrivate?: boolean;
   lastPage: number;
+  onChangePage: (page: number) => void;
   page: number;
   pageSize: number;
 }> = ({
   bills = [],
   isPrivate = false,
   lastPage = 1,
+  onChangePage,
   page = 1,
   pageSize = 10,
 }) => {
   let columns: Column[] = [
     {
       Header: "ID",
-      accessor: "bill_id",
+      accessor: "id",
     },
     {
       Header: "제목",
-      accessor: "bill_title",
+      accessor: "title",
     },
   ];
 
@@ -36,17 +38,13 @@ const Bills: React.FC<{
     ];
   }
 
-  const handleClickPage = useCallback((page: number) => {
-    console.log(page);
-  }, []);
-
   return (
     <Table
       columns={columns}
       currentPage={page}
       data={bills}
       lastPage={lastPage}
-      onClickPage={handleClickPage}
+      onChangePage={onChangePage}
     />
   );
 };

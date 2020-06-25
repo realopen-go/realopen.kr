@@ -11,12 +11,15 @@ export default {
     }: {
       headers?: Headers | string[][] | Record<string, string>;
       params?: { [key: string]: string | number | boolean };
-    }
+    } = {}
   ) => {
-    return ky.get(`${API_HOST}/${endpoint}`, {
-      headers,
-      searchParams: params,
-    });
+    return ky
+      .get(`${API_HOST}/${endpoint}`, {
+        headers,
+        searchParams: params,
+      })
+      .then((res) => res.json())
+      .catch((e) => e.response.json());
   },
   post: (
     endpoint: string,

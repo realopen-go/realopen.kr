@@ -1,16 +1,16 @@
-import React, { useCallback } from "react";
+import React from "react";
 import BootstrapTable from "react-bootstrap/Table";
 import { Column as RtColumn, useTable } from "react-table";
 
-import Pagination from "./Pagination"
+import Pagination from "./Pagination";
 
 const Table: React.FC<{
   columns: RtColumn[];
   currentPage: number;
   data: any[];
-  lastPage: number
-  onClickPage: (arg0: number) => void
-}> = ({ columns, currentPage, data, lastPage, onClickPage }) => {
+  lastPage: number;
+  onChangePage: (arg0: number) => void;
+}> = ({ columns, currentPage, data, lastPage, onChangePage }) => {
   const {
     getTableProps,
     getTableBodyProps,
@@ -18,10 +18,6 @@ const Table: React.FC<{
     rows,
     prepareRow,
   } = useTable({ columns, data });
-
-  const handleClickPage = useCallback((page: number) => {
-    onClickPage(page)
-  }, [onClickPage])
 
   return (
     <>
@@ -41,7 +37,9 @@ const Table: React.FC<{
             return (
               <tr {...row.getRowProps()}>
                 {row.cells.map((cell) => {
-                  return <td {...cell.getCellProps()}>{cell.render("Cell")}</td>;
+                  return (
+                    <td {...cell.getCellProps()}>{cell.render("Cell")}</td>
+                  );
                 })}
               </tr>
             );
@@ -49,11 +47,14 @@ const Table: React.FC<{
         </tbody>
       </BootstrapTable>
 
-      <Pagination currentPage={currentPage} lastPage={lastPage} onClickPage={handleClickPage} />
+      <Pagination
+        currentPage={currentPage}
+        lastPage={lastPage}
+        onChangePage={onChangePage}
+      />
     </>
   );
 };
 
-export type Column = RtColumn
+export type Column = RtColumn;
 export default Table;
-

@@ -6,29 +6,41 @@ import React, {
   useContext,
   useCallback,
 } from "react";
-import { Bill } from "./bills";
+import { Bill } from "../models";
 
 enum ACTION_TYPES {
   FETCH_BILLS = "FETCH_BILLS",
+  SET_QUERY = "SET_QUERY",
 }
 
-type Action = {
-  type: ACTION_TYPES.FETCH_BILLS;
-  bills: Bill[];
+type Query = {
+  page: number;
+  pageSize: number;
 };
+
+type Action =
+  | {
+      type: ACTION_TYPES.FETCH_BILLS;
+      bills: Bill[];
+    }
+  | {
+      type: ACTION_TYPES.SET_QUERY;
+      query: Query;
+    };
 
 interface State {
   bills: Bill[];
   lastPage: number;
-  page: number;
-  pageSize: number;
+  query: Query;
 }
 
 const INITIAL_STATE: State = {
   bills: [],
   lastPage: 1,
-  page: 1,
-  pageSize: 10,
+  query: {
+    page: 1,
+    pageSize: 10,
+  },
 };
 
 const reducer: Reducer<State, Action> = (
@@ -40,6 +52,13 @@ const reducer: Reducer<State, Action> = (
       return {
         ...prevState,
         bills: action.bills,
+      };
+    case ACTION_TYPES.SET_QUERY:
+      return {
+        ...prevState,
+        query: {
+          ...action.query,
+        },
       };
     default:
       return INITIAL_STATE;
@@ -65,14 +84,32 @@ export const useMyBillsContext = () => {
   const { state, dispatch } = useContext(Context);
 
   const initBills = useCallback(() => {
-    dispatch({
-      type: ACTION_TYPES.FETCH_BILLS,
-      bills: [{ bill_id: "2", bill_title: "title 2", content: "내용 " }],
-    });
+    // dispatch({
+    //   type: ACTION_TYPES.FETCH_BILLS,
+    //   bills: [{ bill_id: "2", bill_title: "title 2", content: "내용 " }],
+    // });
   }, [dispatch]);
+
+  const setQuery = useCallback(
+    (query: { page?: number; pageSize?: number }) => {
+      try {
+        dispatch({
+          type: ACTION_TYPES.SET_QUERY,
+          query: {
+            ...state.query,
+            ...query,
+          },
+        });
+      } catch (e) {
+        throw e;
+      }
+    },
+    [dispatch]
+  );
 
   return {
     ...state,
     initBills,
+    setQuery,
   };
 };

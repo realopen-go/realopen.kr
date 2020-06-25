@@ -6,34 +6,54 @@ import React, {
   useContext,
   useReducer,
 } from "react";
+import api from "../lib/api";
+import { Bill } from "../models";
 
-export type Bill = {
-  bill_id: string;
+export type BillResponse = {
+  bill_id: number;
   bill_title: string;
   content?: string;
+  open_status?: string;
+  open_type?: string;
+  processor_code?: number;
+  request_content?: string;
+  user_id: string;
 };
 
 enum ACTION_TYPES {
   FETCH_BILLS = "FETCH_BILLS",
+  SET_QUERY = "SET_QUERY",
 }
 
-type Action = {
-  type: ACTION_TYPES.FETCH_BILLS;
-  bills: Bill[];
+type Action =
+  | {
+      type: ACTION_TYPES.FETCH_BILLS;
+      bills: Bill[];
+      lastPage: number;
+    }
+  | {
+      type: ACTION_TYPES.SET_QUERY;
+      query: Query;
+    };
+
+type Query = {
+  page: number;
+  pageSize: number;
 };
 
 interface State {
   bills: Bill[];
   lastPage: number;
-  page: number;
-  pageSize: number;
+  query: Query;
 }
 
 const INITIAL_STATE: State = {
   bills: [],
   lastPage: 1,
-  page: 1,
-  pageSize: 10,
+  query: {
+    page: 1,
+    pageSize: 10,
+  },
 };
 
 const reducer: Reducer<State, Action> = (
@@ -45,6 +65,14 @@ const reducer: Reducer<State, Action> = (
       return {
         ...prevState,
         bills: action.bills,
+        lastPage: action.lastPage,
+      };
+    case ACTION_TYPES.SET_QUERY:
+      return {
+        ...prevState,
+        query: {
+          ...action.query,
+        },
       };
     default:
       return INITIAL_STATE;
@@ -69,15 +97,44 @@ export const Provider = ({ children }: { children: ReactNode }) => {
 export const useBillsContext = () => {
   const { state, dispatch } = useContext(Context);
 
-  const initBills = useCallback(() => {
-    dispatch({
-      type: ACTION_TYPES.FETCH_BILLS,
-      bills: [{ bill_id: "2", bill_title: "title 2" }],
-    });
-  }, [dispatch]);
+  const fetchAll = useCallback(async () => {
+    try {
+      const res = await api.get("bills", {
+        params: {
+          page: state.query.page,
+          pageSize: state.query.pageSize,
+        },
+      });
+      dispatch({
+        type: ACTION_TYPES.FETCH_BILLS,
+        bills: res.bills.map((bill: BillResponse) => new Bill(bill)),
+        lastPage: res.pageCount,
+      });
+    } catch (e) {
+      throw e;
+    }
+  }, [dispatch, state.query]);
+
+  const setQuery = useCallback(
+    (query: { page?: number; pageSize?: number }) => {
+      try {
+        dispatch({
+          type: ACTION_TYPES.SET_QUERY,
+          query: {
+            ...state.query,
+            ...query,
+          },
+        });
+      } catch (e) {
+        throw e;
+      }
+    },
+    [dispatch, state.query]
+  );
 
   return {
     ...state,
-    initBills,
+    fetchAll,
+    setQuery,
   };
 };

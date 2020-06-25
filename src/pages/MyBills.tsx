@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useCallback, useEffect } from "react";
 import Col from "react-bootstrap/Col";
 import BootstrapContainer from "react-bootstrap/Container";
 import Button from "react-bootstrap/Button";
@@ -20,7 +20,7 @@ const Container = styled(BootstrapContainer)`
 
 const MyBillsPage: React.FC = () => {
   const { register, handleSubmit } = useForm();
-  const { initBills, ...billsState } = useMyBillsContext();
+  const { initBills, setQuery, ...billsState } = useMyBillsContext();
 
   const onSubmit = (data: any) => {
     console.log(data);
@@ -29,6 +29,15 @@ const MyBillsPage: React.FC = () => {
   useEffect(() => {
     initBills();
   }, [initBills]);
+
+  const handleChangePage = useCallback(
+    (page) => {
+      setQuery({
+        page,
+      });
+    },
+    [setQuery]
+  );
 
   return (
     <Page>
@@ -39,8 +48,9 @@ const MyBillsPage: React.FC = () => {
               bills={billsState.bills}
               isPrivate
               lastPage={billsState.lastPage}
-              page={billsState.page}
-              pageSize={billsState.pageSize}
+              onChangePage={handleChangePage}
+              page={billsState.query.page}
+              pageSize={billsState.query.pageSize}
             />
           </Col>
           <Col md={4}>
