@@ -27,7 +27,7 @@ const IndexPage: React.FC = () => {
 
   useEffect(() => {
     fetchAll();
-  }, [fetchAll]);
+  }, []);
 
   useEffect(() => {
     fetchAll();
@@ -44,7 +44,7 @@ const IndexPage: React.FC = () => {
 
   return (
     <Page>
-      <Container>
+      <Container fluid>
         <Row>
           <Col md={8}>
             <Bills

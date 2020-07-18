@@ -1,8 +1,15 @@
 import React from "react";
-import BootstrapTable from "react-bootstrap/Table";
+import OrigBootstrapTable from "react-bootstrap/Table";
 import { Column as RtColumn, useTable } from "react-table";
 
 import Pagination from "./Pagination";
+import styled from "@emotion/styled";
+
+const BootstrapTable = styled(OrigBootstrapTable)`
+  tr {
+    white-space: pre-wrap;
+  }
+`;
 
 const Table: React.FC<{
   columns: RtColumn[];

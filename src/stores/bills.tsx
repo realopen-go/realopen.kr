@@ -17,6 +17,7 @@ export type BillResponse = {
   open_type?: string;
   processor_code?: number;
   request_content?: string;
+  request_date: string;
   user_id: string;
 };
 
@@ -105,9 +106,18 @@ export const useBillsContext = () => {
           pageSize: state.query.pageSize,
         },
       });
+
+      const bills = Object.keys(res.bills)
+        .map((key) => ({
+          bills: res.bills[key].bills.map((b: BillResponse) => new Bill(b)),
+          index: res.bills[key].index,
+        }))
+        .sort((billsGroup) => billsGroup.index)
+        .map((billsGroup) => billsGroup.bills);
+
       dispatch({
         type: ACTION_TYPES.FETCH_BILLS,
-        bills: res.bills.map((bill: BillResponse) => new Bill(bill)),
+        bills,
         lastPage: res.pageCount,
       });
     } catch (e) {

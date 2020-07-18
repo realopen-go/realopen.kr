@@ -15,9 +15,12 @@ export default class Bill {
   content?: string;
   id: number;
   openType?: OpenType;
-  oepnStatus?: OpenStatus;
+  openStatus?: OpenStatus;
   processorCode?: number;
+  processorName?: string;
+  processorDepartmentName?: string;
   requestContent?: string;
+  requestDate?: string;
   title: string;
   username: string;
 
@@ -28,7 +31,10 @@ export default class Bill {
     open_status?: string;
     open_type?: string;
     processor_code?: number;
+    processor_name?: string;
+    processor_department_name?: string;
     request_content?: string;
+    request_date: string;
     user_id: string;
   }) {
     this.id = bill.bill_id;
@@ -45,22 +51,22 @@ export default class Bill {
 
     switch (bill.open_status) {
       case OpenStatus.existingNoticed:
-        this.oepnStatus = OpenStatus.existingNoticed;
+        this.openStatus = OpenStatus.existingNoticed;
         break;
       case OpenStatus.existingProcessed:
-        this.oepnStatus = OpenStatus.existingProcessed;
+        this.openStatus = OpenStatus.existingProcessed;
         break;
       case OpenStatus.existingProcessing:
-        this.oepnStatus = OpenStatus.existingProcessing;
+        this.openStatus = OpenStatus.existingProcessing;
         break;
       case OpenStatus.opened:
-        this.oepnStatus = OpenStatus.opened;
+        this.openStatus = OpenStatus.opened;
         break;
       case OpenStatus.processed:
-        this.oepnStatus = OpenStatus.processed;
+        this.openStatus = OpenStatus.processed;
         break;
       case OpenStatus.processing:
-        this.oepnStatus = OpenStatus.processing;
+        this.openStatus = OpenStatus.processing;
         break;
       default:
         break;
@@ -74,8 +80,18 @@ export default class Bill {
       this.processorCode = bill.processor_code;
     }
 
+    if (bill.processor_department_name) {
+      this.processorDepartmentName = bill.processor_department_name;
+    }
+
+    if (bill.processor_name) {
+      this.processorName = bill.processor_name;
+    }
+
     if (bill.request_content) {
       this.requestContent = bill.request_content;
     }
+
+    this.requestDate = bill.request_date;
   }
 }

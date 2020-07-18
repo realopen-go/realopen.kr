@@ -8,6 +8,7 @@ import { useForm } from "react-hook-form";
 import styled from "@emotion/styled";
 
 import { useAuthStore } from "../stores";
+import { useHistory } from "react-router-dom";
 
 const Container = styled(BootstrapContainer)`
   padding-top: 10px;
@@ -15,15 +16,19 @@ const Container = styled(BootstrapContainer)`
 `;
 
 const LoginPage: React.FC = () => {
-  const { register, handleSubmit } = useForm();
   const { signIn } = useAuthStore();
+  const { register, handleSubmit } = useForm();
 
   const onSubmit = useCallback(
-    (data: any) => {
-      signIn({
-        password: data.password,
-        username: data.username,
-      });
+    async (data: any) => {
+      try {
+        await signIn({
+          password: data.password,
+          username: data.username,
+        });
+      } catch (e) {
+        window.alert(e.message);
+      }
     },
     [signIn]
   );

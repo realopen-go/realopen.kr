@@ -15,11 +15,18 @@ export default {
   ) => {
     return ky
       .get(`${API_HOST}/${endpoint}`, {
+        credentials: "include",
         headers,
         searchParams: params,
       })
       .then((res) => res.json())
-      .catch((e) => e.response.json());
+      .then((res) => {
+        if (res.statusCode >= 300) throw res;
+        return res;
+      })
+      .catch(async (e) => {
+        throw await e.response.json();
+      });
   },
   post: (
     endpoint: string,
@@ -34,10 +41,13 @@ export default {
     return ky
       .post(`${API_HOST}/${endpoint}`, {
         headers,
+        credentials: "include",
         json: body,
       })
       .then((res) => res.json())
-      .catch((e) => e.response.json());
+      .catch(async (e) => {
+        throw await e.response.json();
+      });
   },
   put: (
     endpoint: string,
@@ -50,6 +60,7 @@ export default {
     }
   ) => {
     return ky.put(`${API_HOST}/${endpoint}`, {
+      credentials: "include",
       headers,
       json: body,
     });
@@ -63,6 +74,7 @@ export default {
     }
   ) => {
     return ky.delete(`${API_HOST}/${endpoint}`, {
+      credentials: "include",
       headers,
     });
   },
