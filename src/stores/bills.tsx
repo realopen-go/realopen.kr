@@ -34,12 +34,17 @@ type Action =
     }
   | {
       type: ACTION_TYPES.SET_QUERY;
-      query: Query;
+      query: {
+        page?: number;
+        pageSize?: number;
+        text?: string;
+      };
     };
 
 type Query = {
   page: number;
   pageSize: number;
+  text: string;
 };
 
 interface State {
@@ -54,6 +59,7 @@ const INITIAL_STATE: State = {
   query: {
     page: 1,
     pageSize: 10,
+    text: "",
   },
 };
 
@@ -72,6 +78,7 @@ const reducer: Reducer<State, Action> = (
       return {
         ...prevState,
         query: {
+          ...prevState.query,
           ...action.query,
         },
       };
@@ -101,10 +108,7 @@ export const useBillsContext = () => {
   const fetchAll = useCallback(async () => {
     try {
       const res = await api.get("bills", {
-        params: {
-          page: state.query.page,
-          pageSize: state.query.pageSize,
-        },
+        params: state.query,
       });
 
       const bills = Object.keys(res.bills)
@@ -126,20 +130,17 @@ export const useBillsContext = () => {
   }, [dispatch, state.query]);
 
   const setQuery = useCallback(
-    (query: { page?: number; pageSize?: number }) => {
+    (query: { page?: number; pageSize?: number; text?: string }) => {
       try {
         dispatch({
           type: ACTION_TYPES.SET_QUERY,
-          query: {
-            ...state.query,
-            ...query,
-          },
+          query,
         });
       } catch (e) {
         throw e;
       }
     },
-    [dispatch, state.query]
+    [dispatch]
   );
 
   return {

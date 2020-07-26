@@ -21,9 +21,6 @@ const Container = styled(BootstrapContainer)`
 const IndexPage: React.FC = () => {
   const { register, handleSubmit } = useForm();
   const { fetchAll, setQuery, ...billsState } = useBillsContext();
-  const onSubmit = (data: any) => {
-    console.log(data);
-  };
 
   useEffect(() => {
     fetchAll();
@@ -31,7 +28,16 @@ const IndexPage: React.FC = () => {
 
   useEffect(() => {
     fetchAll();
-  }, [billsState.query.page, billsState.query.pageSize]);
+  }, [billsState.query, fetchAll]);
+
+  const onSubmit = useCallback(
+    (data: any) => {
+      setQuery({
+        text: data.text,
+      });
+    },
+    [setQuery]
+  );
 
   const handleChangePage = useCallback(
     (page) => {
@@ -58,11 +64,7 @@ const IndexPage: React.FC = () => {
           <Col md={4}>
             <Form onSubmit={handleSubmit(onSubmit)}>
               <InputGroup className="mb-3">
-                <FormControl
-                  name="search"
-                  placeholder="검색어"
-                  ref={register}
-                />
+                <FormControl name="text" placeholder="검색어" ref={register} />
                 <InputGroup.Append>
                   <Button type="submit" variant="outline-secondary">
                     검색
