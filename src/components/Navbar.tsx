@@ -19,9 +19,9 @@ const Navbar: React.FC = () => {
             <Link to="/login">로그인</Link>
           </BootstrapNavbar.Text>
         )}
-        <BootstrapNavbar.Text>
+        {/* <BootstrapNavbar.Text>
           <Link to="/my/bills">내 청구건 조회</Link>
-        </BootstrapNavbar.Text>
+        </BootstrapNavbar.Text> */}
       </BootstrapNavbar.Collapse>
     </BootstrapNavbar>
   );
