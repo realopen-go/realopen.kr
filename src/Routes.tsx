@@ -38,7 +38,7 @@ export default () => {
     if (authState.user && authState.user.embagoMonth === null) {
       history.push("/login/embago-month");
     }
-  }, [authState.user]);
+  }, [authState.user, history]);
 
   return (
     <>

@@ -29,6 +29,7 @@ const Bills: React.FC<{
           href={`https://github.com/sluggishhackers/realopen-data-cfoi/tree/master/${
             row[0].requestDate
           }_${row[0].title.replace(/ /g, "_")}`}
+          rel="noopener noreferrer"
           title={`${row[0].title} 파일 링크`}
           target="_blank"
         >

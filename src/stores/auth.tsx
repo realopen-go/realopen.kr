@@ -6,7 +6,6 @@ import React, {
   useContext,
   useReducer,
 } from "react";
-import { useCookies } from "react-cookie";
 
 import api from "../lib/api";
 import { User } from "../models";

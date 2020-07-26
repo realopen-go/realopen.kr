@@ -83,13 +83,6 @@ export const Provider = ({ children }: { children: ReactNode }) => {
 export const useMyBillsContext = () => {
   const { state, dispatch } = useContext(Context);
 
-  const initBills = useCallback(() => {
-    // dispatch({
-    //   type: ACTION_TYPES.FETCH_BILLS,
-    //   bills: [{ bill_id: "2", bill_title: "title 2", content: "내용 " }],
-    // });
-  }, [dispatch]);
-
   const setQuery = useCallback(
     (query: { page?: number; pageSize?: number }) => {
       try {
@@ -104,12 +97,11 @@ export const useMyBillsContext = () => {
         throw e;
       }
     },
-    [dispatch]
+    [dispatch, state.query]
   );
 
   return {
     ...state,
-    initBills,
     setQuery,
   };
 };

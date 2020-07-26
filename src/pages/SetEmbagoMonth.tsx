@@ -40,7 +40,7 @@ const SetEmbagoMonthPage: React.FC = () => {
 
       finishLoading();
     },
-    [embagoMonth, setEmbagoMonth]
+    [embagoMonth, finishLoading, history, startLoading, updateUser]
   );
 
   return (

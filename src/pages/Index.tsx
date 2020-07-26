@@ -24,6 +24,7 @@ const IndexPage: React.FC = () => {
 
   useEffect(() => {
     fetchAll();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {

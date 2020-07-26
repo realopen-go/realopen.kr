@@ -8,7 +8,6 @@ import { useForm } from "react-hook-form";
 import styled from "@emotion/styled";
 
 import { useAuthStore } from "../stores";
-import { useHistory } from "react-router-dom";
 
 const Container = styled(BootstrapContainer)`
   padding-top: 10px;

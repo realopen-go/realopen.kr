@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from "react";
+import React, { useCallback } from "react";
 import Col from "react-bootstrap/Col";
 import BootstrapContainer from "react-bootstrap/Container";
 import Button from "react-bootstrap/Button";
@@ -20,15 +20,11 @@ const Container = styled(BootstrapContainer)`
 
 const MyBillsPage: React.FC = () => {
   const { register, handleSubmit } = useForm();
-  const { initBills, setQuery, ...billsState } = useMyBillsContext();
+  const { setQuery, ...billsState } = useMyBillsContext();
 
   const onSubmit = (data: any) => {
     console.log(data);
   };
-
-  useEffect(() => {
-    initBills();
-  }, [initBills]);
 
   const handleChangePage = useCallback(
     (page) => {
