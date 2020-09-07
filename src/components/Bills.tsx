@@ -42,8 +42,8 @@ const Bills: React.FC<{
       accessor: (row: { [key: string]: any }) =>
         row
           .map(
-            (bill: { openStatus: string; processorName: string }) =>
-              `${bill.processorName} (${bill.openStatus || "-"})`
+            (bill: { openStatus: string; processorDepartmentName: string }) =>
+              `${bill.processorDepartmentName} (${bill.openStatus || "-"})`
           )
           .join("\n"),
     },

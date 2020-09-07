@@ -10,14 +10,15 @@ import api from "../lib/api";
 import { Bill } from "../models";
 
 export type BillResponse = {
-  bill_id: number;
-  bill_title: string;
-  content?: string;
-  open_status?: string;
-  open_type?: string;
-  processor_code?: number;
-  request_content?: string;
+  id: number;
+  request_subject: string;
+  request_description?: string;
+  result_description?: string;
+  status?: string;
+  proc_org_code?: string;
+  proc_org_name?: string;
   request_date: string;
+  group_id: string;
   user_id: string;
 };
 

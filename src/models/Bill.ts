@@ -16,40 +16,42 @@ export default class Bill {
   id: number;
   openType?: OpenType;
   openStatus?: OpenStatus;
-  processorCode?: number;
+  processorCode?: string;
   processorName?: string;
   processorDepartmentName?: string;
-  requestContent?: string;
+  requestDescription?: string;
   requestDate?: string;
   title: string;
   username: string;
 
   constructor(bill: {
-    bill_id: number;
-    bill_title: string;
-    content?: string;
-    open_status?: string;
-    open_type?: string;
-    processor_code?: number;
-    processor_name?: string;
-    processor_department_name?: string;
-    request_content?: string;
+    id: number;
+    request_subject: string;
+    request_description?: string;
+    result_description?: string;
+    status?: string;
+    // open_type?: string;
+    request_proc_registration_number?: number;
+    registration_number?: string;
+    proc_org_code?: string;
+    proc_org_name?: string;
+    proc_registration_number?: string;
     request_date: string;
     user_id: string;
   }) {
-    this.id = bill.bill_id;
-    this.title = bill.bill_title;
+    this.id = bill.id;
+    this.title = bill.request_subject;
     this.username = bill.user_id;
 
-    switch (bill.open_type) {
-      case OpenType.electronic:
-        this.openType = OpenType.electronic;
-        break;
-      default:
-        break;
-    }
+    // switch (bill.open_type) {
+    //   case OpenType.electronic:
+    //     this.openType = OpenType.electronic;
+    //     break;
+    //   default:
+    //     break;
+    // }
 
-    switch (bill.open_status) {
+    switch (bill.status) {
       case OpenStatus.existingNoticed:
         this.openStatus = OpenStatus.existingNoticed;
         break;
@@ -72,24 +74,20 @@ export default class Bill {
         break;
     }
 
-    if (bill.content) {
-      this.content = bill.content;
+    if (bill.result_description) {
+      this.content = bill.result_description;
     }
 
-    if (bill.processor_code) {
-      this.processorCode = bill.processor_code;
+    if (bill.proc_org_code) {
+      this.processorCode = bill.proc_org_code;
     }
 
-    if (bill.processor_department_name) {
-      this.processorDepartmentName = bill.processor_department_name;
+    if (bill.proc_org_name) {
+      this.processorDepartmentName = bill.proc_org_name;
     }
 
-    if (bill.processor_name) {
-      this.processorName = bill.processor_name;
-    }
-
-    if (bill.request_content) {
-      this.requestContent = bill.request_content;
+    if (bill.request_description) {
+      this.requestDescription = bill.request_description;
     }
 
     this.requestDate = bill.request_date;
